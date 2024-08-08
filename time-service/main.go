@@ -29,23 +29,19 @@ func main() {
 	// 启动一个 goroutine 来监听信号
 	go func() {
 		<-sigChan // 等待接收信号
-		fmt.Println("Received an interrupt, cleaning up...")
-
-		// 这里放置清理逻辑
-		// 例如：关闭文件描述符、断开网络连接等
-
-		fmt.Println("Cleanup finished, exiting...")
+		apis.Unregister()
 		os.Exit(0) // 退出程序
 	}()
 
 	router := routers.InitRouter()
 
 	s := &http.Server{
-		Addr:    fmt.Sprintf(":%s", cfg.Server.Port),
+		Addr:    fmt.Sprintf(":%d", cfg.Server.Port),
 		Handler: router,
 	}
 
 	server.InitTimeServer()
+	apis.Register()
 	go apis.Heartbeat()
 	if err := s.ListenAndServe(); err != nil {
 		log.Printf("Listen: %s\n", err)

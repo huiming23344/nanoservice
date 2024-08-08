@@ -9,14 +9,14 @@ import (
 
 type Registry struct {
 	Address string `yaml:"address"`
-	Port    string `yaml:"port"`
+	Port    int    `yaml:"port"`
 }
 
 type timeServer struct {
 	ServiceName string
 	ServiceId   string
 	IpAddress   string
-	Port        string
+	Port        int
 	Registry    Registry
 }
 

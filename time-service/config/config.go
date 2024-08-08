@@ -24,11 +24,11 @@ func serverConfigPath() string {
 
 type Config struct {
 	Server struct {
-		Port string `yaml:"port"`
+		Port int `yaml:"port"`
 	}
 	Registry struct {
 		Address string `yaml:"address"`
-		Port    string `yaml:"port"`
+		Port    int    `yaml:"port"`
 	}
 }
 

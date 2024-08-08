@@ -14,7 +14,7 @@ import (
 type HBRequest struct {
 	ServiceId string `json:"serviceId"`
 	IpAddress string `json:"ipAddress"`
-	Port      string `json:"port"`
+	Port      int    `json:"port"`
 }
 
 func HeartbeatOnce() {
@@ -25,7 +25,7 @@ func HeartbeatOnce() {
 	}
 	jsonData, _ := json.Marshal(body)
 	reqBody := bytes.NewBuffer(jsonData)
-	url := fmt.Sprintf("http://%s:%s/api/heartbeat", server.TimeServer.Registry.Address, server.TimeServer.Registry.Port)
+	url := fmt.Sprintf("http://%s:%d/api/heartbeat", server.TimeServer.Registry.Address, server.TimeServer.Registry.Port)
 	req, err := http.NewRequest("POST", url, reqBody)
 	if err != nil {
 		fmt.Println("http.NewRequest failed, err:", err)
