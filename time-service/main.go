@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/huiming23344/nanoservice/time-service/apis"
 	"github.com/huiming23344/nanoservice/time-service/config"
 	routers "github.com/huiming23344/nanoservice/time-service/router"
 	"github.com/huiming23344/nanoservice/time-service/server"
@@ -40,13 +41,12 @@ func main() {
 	router := routers.InitRouter()
 
 	s := &http.Server{
-		Addr:           fmt.Sprintf(":%s", cfg.Server.Port),
-		Handler:        router,
-		MaxHeaderBytes: 1 << 20,
+		Addr:    fmt.Sprintf(":%s", cfg.Server.Port),
+		Handler: router,
 	}
 
 	server.InitTimeServer()
-
+	go apis.Heartbeat()
 	if err := s.ListenAndServe(); err != nil {
 		log.Printf("Listen: %s\n", err)
 	}
