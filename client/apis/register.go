@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/huiming23344/nanoservice/time-service/server"
+	"github.com/huiming23344/nanoservice/client/server"
 	"io"
 	"log"
 	"net/http"
@@ -19,14 +19,14 @@ type Service struct {
 
 func Register() {
 	body := Service{
-		ServiceName: server.TimeServer.ServiceName,
-		ServiceId:   server.TimeServer.ServiceId,
-		IpAddress:   server.TimeServer.IpAddress,
-		Port:        server.TimeServer.Port,
+		ServiceName: server.ClientServer.ServiceName,
+		ServiceId:   server.ClientServer.ServiceId,
+		IpAddress:   server.ClientServer.IpAddress,
+		Port:        server.ClientServer.Port,
 	}
 	jsonData, _ := json.Marshal(body)
 	reqBody := bytes.NewBuffer(jsonData)
-	url := fmt.Sprintf("http://%s:%d/api/register", server.TimeServer.Registry.Address, server.TimeServer.Registry.Port)
+	url := fmt.Sprintf("http://%s:%d/api/register", server.ClientServer.Registry.Address, server.ClientServer.Registry.Port)
 	req, err := http.NewRequest("POST", url, reqBody)
 	if err != nil {
 		fmt.Println("http.NewRequest failed, err:", err)
@@ -50,14 +50,14 @@ func Register() {
 
 func Unregister() {
 	body := Service{
-		ServiceName: server.TimeServer.ServiceName,
-		ServiceId:   server.TimeServer.ServiceId,
-		IpAddress:   server.TimeServer.IpAddress,
-		Port:        server.TimeServer.Port,
+		ServiceName: server.ClientServer.ServiceName,
+		ServiceId:   server.ClientServer.ServiceId,
+		IpAddress:   server.ClientServer.IpAddress,
+		Port:        server.ClientServer.Port,
 	}
 	jsonData, _ := json.Marshal(body)
 	reqBody := bytes.NewBuffer(jsonData)
-	url := fmt.Sprintf("http://%s:d/api/unregister", server.TimeServer.Registry.Address, server.TimeServer.Registry.Port)
+	url := fmt.Sprintf("http://%s:d/api/unregister", server.ClientServer.Registry.Address, server.ClientServer.Registry.Port)
 	req, err := http.NewRequest("POST", url, reqBody)
 	if err != nil {
 		fmt.Println("http.NewRequest failed, err:", err)
