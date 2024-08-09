@@ -48,7 +48,7 @@ func HeartbeatOnce() {
 }
 
 func Heartbeat() {
-	ticker := time.NewTicker(60 * time.Second)
+	ticker := time.NewTicker(5 * time.Second)
 	for range ticker.C {
 		HeartbeatOnce()
 	}

@@ -1,4 +1,4 @@
-module github.com/huiming23344/nanoservice/registry
+module github.com/huiming23344/nanoservice/client
 
 go 1.22.5
 

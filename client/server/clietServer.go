@@ -32,7 +32,7 @@ func InitClientServer() {
 	}
 	fmt.Printf("serviceId: %s\n", serviceId)
 	ClientServer = clientServer{
-		ServiceName: "time-service",
+		ServiceName: "client",
 		ServiceId:   serviceId,
 		IpAddress:   addrs[len(addrs)-1],
 		Port:        cfg.Server.Port,
