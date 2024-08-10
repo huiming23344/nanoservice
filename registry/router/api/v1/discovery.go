@@ -2,6 +2,7 @@ package v1
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/huiming23344/nanoservice/registry/server"
 )
@@ -9,6 +10,7 @@ import (
 func Discovery(c *gin.Context) {
 	var serviceRspList []ServiceReq
 	serviceName := c.GetHeader("serviceName")
+	fmt.Printf("serviceName: %s\n", serviceName)
 	if serviceName == "" {
 		serviceList := server.GetAllService()
 		for _, service := range serviceList {

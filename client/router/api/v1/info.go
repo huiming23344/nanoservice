@@ -24,7 +24,8 @@ func QueryInfo(c *gin.Context) {
 	}
 	service := services[0]
 	timeRsp := apis.QueryTimeByStyle("full", service.IpAddress, service.Port)
-	timeGet, err := time.Parse(timeRsp, "2006-01-02 15:04:05")
+	fmt.Printf("timeRsp: %s\n", timeRsp)
+	timeGet, err := time.Parse("2006-01-02 15:04:05", timeRsp)
 	if err != nil {
 		c.JSON(200, TimeResp{
 			Error:  "Parse time failed",

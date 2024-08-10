@@ -26,7 +26,7 @@ func HeartbeatOnce() {
 	jsonData, _ := json.Marshal(body)
 	reqBody := bytes.NewBuffer(jsonData)
 	url := fmt.Sprintf("http://%s:%d/api/heartbeat", server.TimeServer.Registry.Address, server.TimeServer.Registry.Port)
-	req, err := http.NewRequest("POST", url, reqBody)
+	req, err := http.NewRequest("GET", url, reqBody)
 	if err != nil {
 		fmt.Println("http.NewRequest failed, err:", err)
 		return

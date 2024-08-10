@@ -4,10 +4,16 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/huiming23344/nanoservice/registry/config"
-	v1 "github.com/huiming23344/nanoservice/registry/router/api/v1"
 	"net"
 	"time"
 )
+
+type ServiceReq struct {
+	ServiceName string `json:"serviceName"`
+	ServiceId   string `json:"serviceId"`
+	IpAddress   string `json:"ipAddress"`
+	Port        int    `json:"port"`
+}
 
 type Service struct {
 	ServiceName string `json:"serviceName"`
@@ -75,7 +81,8 @@ func getHostIPAddresses() ([]string, error) {
 	return addresses, nil
 }
 
-func RegisterService(serviceReq *v1.ServiceReq) {
+func RegisterService(serviceReq ServiceReq) {
+	fmt.Printf("register service: %v\n", serviceReq)
 	cfg := config.GlobalConfig()
 	service := &Service{
 		Port:        serviceReq.Port,
@@ -84,12 +91,12 @@ func RegisterService(serviceReq *v1.ServiceReq) {
 		IpAddress:   serviceReq.IpAddress,
 		Timer:       cfg.Server.HeartBeatTimeout,
 	}
-	RegistryServer.ServiceMap[serviceReq.ServiceName] = service
+	RegistryServer.ServiceMap[serviceReq.ServiceId] = service
 	RegistryServer.ServiceNameMap[serviceReq.ServiceName] = append(RegistryServer.ServiceNameMap[serviceReq.ServiceName], serviceReq.ServiceId)
 
 }
 
-func CheckIsRight(serviceReq *v1.ServiceReq) bool {
+func CheckIsRight(serviceReq ServiceReq) bool {
 	have := RegistryServer.ServiceMap[serviceReq.ServiceId]
 	if have != nil {
 		if have.ServiceName != serviceReq.ServiceName || have.IpAddress != serviceReq.IpAddress || have.Port != serviceReq.Port {
@@ -100,12 +107,13 @@ func CheckIsRight(serviceReq *v1.ServiceReq) bool {
 	return false
 }
 
-func UnregisterService(serviceReq *v1.ServiceReq) bool {
+func UnregisterService(serviceReq ServiceReq) bool {
+	fmt.Printf("unregister service: %v\n", serviceReq)
 	if CheckIsRight(serviceReq) == false {
 		return false
 	}
-	if _, ok := RegistryServer.ServiceMap[serviceReq.ServiceName]; ok {
-		delete(RegistryServer.ServiceMap, serviceReq.ServiceName)
+	if _, ok := RegistryServer.ServiceMap[serviceReq.ServiceId]; ok {
+		delete(RegistryServer.ServiceMap, serviceReq.ServiceId)
 	}
 	if _, ok := RegistryServer.ServiceNameMap[serviceReq.ServiceName]; ok {
 		for i, serviceId := range RegistryServer.ServiceNameMap[serviceReq.ServiceName] {
@@ -145,13 +153,17 @@ func HeartbeatService(serviceId string) {
 func CheckService() {
 	for _, service := range RegistryServer.ServiceMap {
 		service.Timer--
+		fmt.Printf("serviceId: %s, timer: %d\n", service.ServiceId, service.Timer)
 		if service.Timer <= 0 {
-			UnregisterService(&v1.ServiceReq{
-				ServiceName: service.ServiceName,
-				ServiceId:   service.ServiceId,
-				IpAddress:   service.IpAddress,
-				Port:        service.Port,
-			})
+			have := RegistryServer.ServiceMap[service.ServiceId]
+			if have != nil {
+				UnregisterService(ServiceReq{
+					ServiceName: service.ServiceName,
+					ServiceId:   service.ServiceId,
+					IpAddress:   service.IpAddress,
+					Port:        service.Port,
+				})
+			}
 		}
 	}
 }

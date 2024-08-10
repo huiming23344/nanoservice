@@ -21,7 +21,12 @@ func Register(c *gin.Context) {
 		})
 		return
 	}
-	server.RegisterService(&body)
+	server.RegisterService(server.ServiceReq{
+		ServiceName: body.ServiceName,
+		ServiceId:   body.ServiceId,
+		IpAddress:   body.IpAddress,
+		Port:        body.Port,
+	})
 	c.JSON(200, gin.H{
 		"message": "register success",
 	})
@@ -36,13 +41,19 @@ func Unregister(c *gin.Context) {
 		})
 		return
 	}
-	success := server.UnregisterService(&body)
+	success := server.UnregisterService(server.ServiceReq{
+		ServiceName: body.ServiceName,
+		ServiceId:   body.ServiceId,
+		IpAddress:   body.IpAddress,
+		Port:        body.Port,
+	})
 	if success {
 		c.JSON(200, gin.H{
 			"message": "unregister success",
 		})
+	} else {
+		c.JSON(200, gin.H{
+			"error": "unregister failed",
+		})
 	}
-	c.JSON(200, gin.H{
-		"error": "unregister failed",
-	})
 }

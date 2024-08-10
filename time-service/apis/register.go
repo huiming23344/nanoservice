@@ -57,7 +57,7 @@ func Unregister() {
 	}
 	jsonData, _ := json.Marshal(body)
 	reqBody := bytes.NewBuffer(jsonData)
-	url := fmt.Sprintf("http://%s:d/api/unregister", server.TimeServer.Registry.Address, server.TimeServer.Registry.Port)
+	url := fmt.Sprintf("http://%s:%d/api/unregister", server.TimeServer.Registry.Address, server.TimeServer.Registry.Port)
 	req, err := http.NewRequest("POST", url, reqBody)
 	if err != nil {
 		fmt.Println("http.NewRequest failed, err:", err)

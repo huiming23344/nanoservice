@@ -11,7 +11,7 @@ import (
 
 func Discovery(service string) []Service {
 	url := fmt.Sprintf("http://%s:%d/api/discovery", server.ClientServer.Registry.Address, server.ClientServer.Registry.Port)
-	req, err := http.NewRequest("POST", url, nil)
+	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		fmt.Println("http.NewRequest failed, err:", err)
 		return nil
