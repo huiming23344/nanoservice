@@ -18,6 +18,15 @@ type logServer struct {
 	IpAddress   string
 	Port        int
 	Registry    Registry
+	LogList     []*Log
+}
+
+type Log struct {
+	ServiceName string `json:"serviceName"`
+	ServiceId   string `json:"serviceId"`
+	Datetime    string `json:"datetime"`
+	Level       string `json:"level"`
+	Message     string `json:"message"`
 }
 
 var LogServer logServer
@@ -41,6 +50,10 @@ func InitTimeServer() {
 			Port:    cfg.Registry.Port,
 		},
 	}
+}
+
+func SetLog(log *Log) {
+	LogServer.LogList = append(LogServer.LogList, log)
 }
 
 func getHostIPAddresses() ([]string, error) {

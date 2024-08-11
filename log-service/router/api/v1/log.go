@@ -2,6 +2,7 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/huiming23344/nanoservice/log-service/server"
 )
 
 type LogReq struct {
@@ -18,5 +19,12 @@ func SetLog(c *gin.Context) {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
+	server.SetLog(&server.Log{
+		ServiceName: logReq.ServiceName,
+		ServiceId:   logReq.ServiceId,
+		Datetime:    logReq.Datetime,
+		Level:       logReq.Level,
+		Message:     logReq.Message,
+	})
 	c.JSON(200, gin.H{"message": "success"})
 }
